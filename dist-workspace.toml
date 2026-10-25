@@ -1,0 +1,26 @@
+[workspace]
+members = ["cargo:."]
+
+[dist]
+cargo-dist-version = "0.33.0"
+ci = "github"
+installers = ["shell", "powershell", "homebrew", "msi"]
+tap = "mrbandler/homebrew-tap"
+publish-jobs = ["homebrew"]
+targets = [
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-unknown-linux-gnu",
+    "x86_64-unknown-linux-musl",
+    "x86_64-pc-windows-msvc",
+]
+install-path = "CARGO_HOME"
+install-updater = false
+github-attestations = true
+# Only CLI tags trigger dist; library tags (rust-template-v…) are released by release-plz.
+tag-namespace = "rust-template-cli-v"
+# Dependabot owns the action SHAs in the generated release workflow (it can't edit this file),
+# so dist must not fail when they differ from what `dist generate` would write. After running
+# `dist generate`, re-pin the actions to SHAs (zizmor in CI flags unpinned ones).
+allow-dirty = ["ci"]
