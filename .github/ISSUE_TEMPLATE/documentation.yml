@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve rust-template's documentation!
+        Thanks for helping improve senn's documentation!
 
   - type: dropdown
     id: doc-type

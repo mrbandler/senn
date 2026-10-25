@@ -1,9 +1,9 @@
-//! Command-line interface of `rust-template`.
+//! Command-line interface of `senn`.
 
 use clap::Parser;
 use tracing_subscriber::EnvFilter;
 
-/// Command-line interface of `rust-template`.
+/// Command-line interface of `senn`.
 #[derive(Debug, Parser)]
 #[command(version, about)]
 struct Cli {
@@ -20,7 +20,7 @@ fn main() -> miette::Result<()> {
 
     let cli = Cli::parse();
     tracing::debug!(?cli, "parsed arguments");
-    println!("{}", rust_template::greet(&cli.name)?);
+    println!("{}", senn::greet(&cli.name)?);
     Ok(())
 }
 

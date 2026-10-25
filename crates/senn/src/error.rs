@@ -1,4 +1,4 @@
-//! Error types of `rust-template`.
+//! Error types of `senn`.
 
 use miette::Diagnostic;
 use thiserror::Error;
@@ -8,7 +8,7 @@ use thiserror::Error;
 pub enum Error {
     /// The given name was empty or whitespace only.
     #[error("name must not be empty")]
-    #[diagnostic(code(rust_template::empty_name), help("pass a name, e.g. `world`"))]
+    #[diagnostic(code(senn::empty_name), help("pass a name, e.g. `world`"))]
     EmptyName,
 }
 

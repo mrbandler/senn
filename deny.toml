@@ -33,9 +33,6 @@ allow = [
     "CC0-1.0",
     "MPL-2.0",
     "BSL-1.0",
-    # init:agpl:start
-    "AGPL-3.0-or-later",
-    # init:agpl:end
 ]
 
 # Unpublished workspace crates (publish = false) are not license-checked.

@@ -1,4 +1,4 @@
-# Contributing to rust-template
+# Contributing to senn
 
 Thanks for your interest! Please read the [Code of Conduct](CODE_OF_CONDUCT.md) first.
 
@@ -24,24 +24,6 @@ Both install the git hooks: fast checks on commit, tests and dependency checks o
 - `cargo fmt` and `cargo clippy` (pedantic) must pass; CI treats warnings as errors.
 - `unsafe` code is forbidden.
 - Libraries return typed errors (`thiserror` + `miette::Diagnostic`).
-<!-- init:bin:start -->
 - Binaries render errors with `miette`.
-<!-- init:bin:end -->
 - Public items need doc comments; examples in docs are tested.
 - Features must be additive; CI checks each feature on its own.
-<!-- init:dual:start -->
-
-## License
-
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion
-in this project by you, as defined in the Apache-2.0 license, shall be dual licensed under
-MIT and Apache-2.0, without any additional terms or conditions.
-<!-- init:dual:end -->
-<!-- init:agpl:start -->
-
-## Contributor License Agreement
-
-This project is licensed under the AGPL and may also be offered under commercial terms.
-To make that possible, contributors sign the [CLA](CLA.md) once: the CLA bot comments on your
-first pull request with instructions. You keep the copyright to your contributions.
-<!-- init:agpl:end -->

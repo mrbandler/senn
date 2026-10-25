@@ -1,5 +1,5 @@
 {
-  description = "rust-template";
+  description = "senn";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -45,14 +45,14 @@
         in
         {
           default = rustPlatform.buildRustPackage {
-            pname = "rust-template";
+            pname = "senn";
             version = cargo.workspace.package.version;
             src = pkgs.lib.cleanSource ./.;
             # Dependency hashes come from Cargo.lock; nothing to update by hand.
             cargoLock.lockFile = ./Cargo.lock;
-            cargoBuildFlags = [ "--package" "rust-template-cli" ];
-            cargoTestFlags = [ "--package" "rust-template-cli" ];
-            meta.mainProgram = "rust-template";
+            cargoBuildFlags = [ "--package" "senn-cli" ];
+            cargoTestFlags = [ "--package" "senn-cli" ];
+            meta.mainProgram = "senn";
           };
         }
       );
