@@ -96,7 +96,6 @@ jobs:
         env:
           RUSTDOCFLAGS: -D warnings
 
-  # init:bin:start
   nix:
     name: Nix package
     runs-on: ubuntu-latest
@@ -107,7 +106,6 @@ jobs:
       - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
       - run: nix build --print-build-logs
       - run: nix run . -- Ferris
-  # init:bin:end
 
   ci-success:
     name: CI Success
@@ -117,9 +115,7 @@ jobs:
       - test
       - msrv
       - docs
-      # init:bin:start
       - nix
-      # init:bin:end
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any job failed

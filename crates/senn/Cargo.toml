@@ -1,6 +1,6 @@
 [package]
-name = "rust-template"
-description = "The rust-template library."
+name = "senn"
+description = "The senn library."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

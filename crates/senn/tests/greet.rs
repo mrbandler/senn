@@ -1,4 +1,4 @@
-use rust_template::{Error, greet};
+use senn::{Error, greet};
 
 #[test]
 fn greets_trimmed_name() {

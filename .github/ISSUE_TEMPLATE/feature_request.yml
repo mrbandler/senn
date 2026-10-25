@@ -22,12 +22,10 @@ body:
     id: area
     attributes:
       label: Area
-      description: Which part of rust-template does this feature relate to?
+      description: Which part of senn does this feature relate to?
       options:
-        - Library (rust-template)
-        # init:bin:start
-        - CLI (rust-template-cli)
-        # init:bin:end
+        - Library (senn)
+        - CLI (senn-cli)
         - Documentation
         - Other
     validations:

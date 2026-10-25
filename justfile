@@ -48,21 +48,3 @@ gh-setup:
     gh api --method POST "repos/{owner}/{repo}/rulesets" --input .github/rulesets/main.json
     gh api --method PATCH "repos/{owner}/{repo}" -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false -F delete_branch_on_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
     gh api --method POST "repos/{owner}/{repo}/pages" -f build_type=workflow
-# init:template:start
-
-# Arguments are passed through as-is (not via {{ }}), so quoted values with spaces survive.
-# Turn this template into a new project (see README.md for the options)
-[positional-arguments]
-[unix]
-init *ARGS:
-    cargo xtask init "$@"
-
-# `pwsh -Command` would join the arguments back into one string; a script gets them as `$args`.
-[positional-arguments]
-[windows]
-[script("pwsh", "-NoLogo", "-NoProfile")]
-[extension(".ps1")]
-init *ARGS:
-    cargo xtask init @args
-    exit $LASTEXITCODE
-# init:template:end

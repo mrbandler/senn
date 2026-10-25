@@ -1,6 +1,6 @@
 [package]
-name = "rust-template-cli"
-description = "Command-line interface of rust-template."
+name = "senn-cli"
+description = "Command-line interface of senn."
 publish = false
 version.workspace = true
 edition.workspace = true
@@ -13,13 +13,13 @@ readme.workspace = true
 
 # The package is `<name>-cli` because the library owns `<name>`; the command is still `<name>`.
 [[bin]]
-name = "rust-template"
+name = "senn"
 path = "src/main.rs"
 # Shares its name with the library, so `cargo doc` would overwrite the library docs (cargo#6313).
 doc = false
 
 [dependencies]
-rust-template.workspace = true
+senn.workspace = true
 clap.workspace = true
 miette = { workspace = true, features = ["fancy"] }
 tracing.workspace = true
@@ -32,10 +32,10 @@ workspace = true
 [package.metadata.dist]
 dist = true
 # Homebrew formula named after the command, not the package.
-formula = "rust-template"
+formula = "senn"
 
 [package.metadata.wix]
-upgrade-guid = "CB986D74-F058-40E3-B4E2-D38D1B341B2B"
-path-guid = "2DCF68D7-579B-4379-B289-F1BADDEDCCD6"
+upgrade-guid = "34307908-0529-4279-B02F-8D34FD6B14F5"
+path-guid = "4B15510B-AE43-490C-A984-0F11D73410F2"
 license = false
 eula = false
