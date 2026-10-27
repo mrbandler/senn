@@ -62,6 +62,11 @@
 
       lib.presets.hetzner = import ./nix/presets/hetzner.nix { inherit inputs; };
 
+      templates.default = {
+        path = ./template;
+        description = "A new Senn herd";
+      };
+
       packages = forAllSystems (
         pkgs:
         let
