@@ -6,13 +6,10 @@ use tracing_subscriber::EnvFilter;
 /// Command-line interface of `senn`.
 #[derive(Debug, Parser)]
 #[command(version, about)]
-struct Cli {
-    /// Who to greet.
-    #[arg(default_value = "world")]
-    name: String,
-}
+struct Cli {}
 
-fn main() -> miette::Result<()> {
+/// Sets up logging to stderr (filtered by `RUST_LOG`) and parses the arguments.
+fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(EnvFilter::from_default_env())
         .with_writer(std::io::stderr)
@@ -20,8 +17,6 @@ fn main() -> miette::Result<()> {
 
     let cli = Cli::parse();
     tracing::debug!(?cli, "parsed arguments");
-    println!("{}", senn::greet(&cli.name)?);
-    Ok(())
 }
 
 #[cfg(test)]
