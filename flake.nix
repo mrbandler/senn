@@ -60,7 +60,7 @@
     {
       flakeModules.default = import ./nix/flake-module.nix { inherit inputs self; };
 
-      lib.presets = { };
+      lib.presets.hetzner = import ./nix/presets/hetzner.nix { inherit inputs; };
 
       packages = forAllSystems (
         pkgs:
