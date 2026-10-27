@@ -10,10 +10,8 @@
   kind = "hetzner";
 
   nixpkgsProviders = p: [ p.hetznercloud_hcloud ];
-  providers.hcloud = {
-    source = "hetznercloud/hcloud";
-    version = ">= 1.70.0";
-  };
+  # No version constraint: the provider comes from nixpkgs, so flake.lock is the only pin.
+  providers.hcloud.source = "hetznercloud/hcloud";
 
   # Resources shared by all Hetzner hosts of a herd.
   shared =
