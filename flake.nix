@@ -88,6 +88,23 @@
             cargoTestFlags = [ "--package" "senn-cli" ];
             meta.mainProgram = "senn";
           };
+
+          senn-backend-onepassword = rustPlatform.buildRustPackage {
+            pname = "senn-backend-onepassword";
+            version = cargo.workspace.package.version;
+            src = pkgs.lib.cleanSource ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+            cargoBuildFlags = [ "--package" "senn-backend-onepassword" ];
+            cargoTestFlags = [ "--package" "senn-backend-onepassword" ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            # Suffix, not prefix: an `op` already on PATH wins. On NixOS only the
+            # wrapper from programs._1password can talk to the desktop app.
+            postFixup = ''
+              wrapProgram $out/bin/senn-backend-onepassword \
+                --suffix PATH : ${pkgs.lib.makeBinPath [ pkgs._1password-cli ]}
+            '';
+            meta.mainProgram = "senn-backend-onepassword";
+          };
         }
       );
     };

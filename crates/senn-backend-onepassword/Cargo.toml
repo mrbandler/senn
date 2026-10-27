@@ -1,0 +1,22 @@
+[package]
+name = "senn-backend-onepassword"
+description = "1Password secrets backend of senn (protocol 1)."
+# Shipped as a Nix package, not on crates.io.
+publish = false
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+
+[dependencies]
+senn.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+miette = { workspace = true, features = ["fancy"] }
+
+[lints]
+workspace = true
