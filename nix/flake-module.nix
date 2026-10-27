@@ -1,10 +1,10 @@
-# Entry point of Senn for instance flakes (flake-parts module).
+# Entry point of Senn for herd flakes (flake-parts module).
 # Called with Senn's own inputs. den reads `den`, `nixpkgs` and `import-tree`
-# from the instance's inputs, so instances follow those from `senn`.
+# from the herd's inputs, so herds follow those from `senn`.
 { inputs, self }:
 {
   imports = [
     inputs.den.flakeModule
-    (import ./instance.nix { inherit inputs self; })
+    (import ./herd.nix { inherit inputs self; })
   ];
 }

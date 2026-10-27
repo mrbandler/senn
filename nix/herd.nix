@@ -1,4 +1,4 @@
-# Options for one Senn instance, and the fields a host definition carries.
+# Options for one Senn herd (one infra project), and the fields a host definition carries.
 { self, ... }:
 { lib, ... }:
 let
@@ -6,10 +6,10 @@ let
   ref = types.str; # a secret reference, resolved by the secrets backend
 in
 {
-  options.senn.instance = {
+  options.senn.herd = {
     name = mkOption {
       type = types.str;
-      description = "Instance name.";
+      description = "Herd name.";
     };
     operatorKeys = mkOption {
       type = types.listOf types.str;
