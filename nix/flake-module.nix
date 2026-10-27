@@ -6,5 +6,6 @@
   imports = [
     inputs.den.flakeModule
     (import ./herd.nix { inherit inputs self; })
+    (import ./base.nix { inherit inputs self; })
   ];
 }
