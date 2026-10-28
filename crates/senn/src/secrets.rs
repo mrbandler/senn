@@ -2,7 +2,12 @@
 
 use crate::error::{Error, Result};
 use crate::protocol::{Request, Response};
-use crate::runner::{Cmd, Runner, run};
+use std::borrow::Borrow;
+use std::fmt;
+
+use serde::Deserialize;
+
+use crate::runner::{Cmd, Runner};
 
 /// Reads secrets through a backend program.
 pub struct Secrets<'a> {
@@ -24,12 +29,14 @@ impl<'a> Secrets<'a> {
     ///
     /// # Errors
     ///
-    /// The errors of [`run`] if the backend can't start or fails, and
+    /// The errors of [`Runner::run`] if the backend can't start or fails, and
     /// [`Error::Protocol`] if its response is not valid. The error names the reference,
     /// never the output, because the output can contain the secret.
     pub fn read(&self, reference: &str) -> Result<String> {
         let request = serde_json::to_string(&Request::read(reference))?;
-        let out = run(self.runner, &Cmd::new(self.program).stdin(request).capture())?;
+        let out = self
+            .runner
+            .run(&Cmd::new(self.program).stdin(request).capture())?;
         let response: Response = serde_json::from_str(&out).map_err(|_| {
             Error::Protocol(format!(
                 "the secrets backend returned an invalid response for {reference}"
@@ -40,23 +47,48 @@ impl<'a> Secrets<'a> {
     }
 }
 
-/// Checks that `name` is safe as a secret name.
+/// The name of a host secret, checked to be safe.
 ///
 /// Secret names become file names in `/var/lib/senn/secrets` on hosts and appear in
 /// remote shell commands, so only lowercase ASCII letters, digits and dashes are allowed.
-///
-/// # Errors
-///
-/// [`Error::InvalidSecretName`] if `name` is empty or has any other character.
-pub fn validate_name(name: &str) -> Result<()> {
-    let ok = !name.is_empty()
-        && name
-            .bytes()
-            .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-');
-    if ok {
-        Ok(())
-    } else {
-        Err(Error::InvalidSecretName(name.to_owned()))
+/// The manifest checks every name while it parses.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
+#[serde(try_from = "String")]
+pub struct SecretName(String);
+
+impl SecretName {
+    /// The name as a string.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl TryFrom<String> for SecretName {
+    type Error = Error;
+
+    fn try_from(name: String) -> Result<Self> {
+        let ok = !name.is_empty()
+            && name
+                .bytes()
+                .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-');
+        if ok {
+            Ok(Self(name))
+        } else {
+            Err(Error::InvalidSecretName(name))
+        }
+    }
+}
+
+impl Borrow<str> for SecretName {
+    fn borrow(&self) -> &str {
+        &self.0
+    }
+}
+
+impl fmt::Display for SecretName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(&self.0)
     }
 }
 
@@ -102,9 +134,9 @@ mod tests {
 
     #[test]
     fn secret_names_are_restricted() {
-        assert!(validate_name("tailscale-authkey").is_ok());
+        assert!(SecretName::try_from("tailscale-authkey".to_owned()).is_ok());
         for bad in ["", "../x", "a b", "A", "x;rm", "a/b"] {
-            assert!(validate_name(bad).is_err(), "{bad} accepted");
+            assert!(SecretName::try_from(bad.to_owned()).is_err(), "{bad} accepted");
         }
     }
 }

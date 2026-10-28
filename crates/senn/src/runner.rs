@@ -112,29 +112,29 @@ pub struct Output {
 
 /// Runs programs. [`System`] runs real processes; tests use a fake.
 pub trait Runner {
-    /// Runs `cmd` to completion. A non-zero exit is not an error here; see [`run`].
+    /// Runs `cmd` to completion. A non-zero exit is not an error here; see [`Runner::run`].
     ///
     /// # Errors
     ///
     /// [`Error::Spawn`] if the program cannot start, [`Error::Io`] if stdin or stdout
     /// fails, [`Error::Protocol`] if captured stdout is not UTF-8.
     fn exec(&self, cmd: &Cmd) -> Result<Output>;
-}
 
-/// Runs `cmd` and returns its stdout (empty unless captured).
-///
-/// # Errors
-///
-/// The errors of [`Runner::exec`], and [`Error::Failed`] if the program exits non-zero.
-pub fn run(runner: &dyn Runner, cmd: &Cmd) -> Result<String> {
-    let out = runner.exec(cmd)?;
-    if out.code == Some(0) {
-        Ok(out.stdout)
-    } else {
-        Err(Error::Failed {
-            program: cmd.program.clone(),
-            code: out.code,
-        })
+    /// Runs `cmd` and returns its stdout (empty unless captured).
+    ///
+    /// # Errors
+    ///
+    /// The errors of [`Runner::exec`], and [`Error::Failed`] if the program exits non-zero.
+    fn run(&self, cmd: &Cmd) -> Result<String> {
+        let out = self.exec(cmd)?;
+        if out.code == Some(0) {
+            Ok(out.stdout)
+        } else {
+            Err(Error::Failed {
+                program: cmd.program.clone(),
+                code: out.code,
+            })
+        }
     }
 }
 
@@ -248,7 +248,7 @@ mod tests {
 
     #[test]
     fn run_captures_stdout() {
-        let out = run(&System, &shell("echo hello").capture()).unwrap();
+        let out = System.run(&shell("echo hello").capture()).unwrap();
         assert_eq!(out.trim_end(), "hello");
     }
 
@@ -256,13 +256,13 @@ mod tests {
     fn run_feeds_stdin() {
         // `sort` with one line prints it unchanged; Windows has no `cat`.
         let cmd = Cmd::new(if cfg!(windows) { "sort" } else { "cat" });
-        let out = run(&System, &cmd.stdin("piped\n").capture()).unwrap();
+        let out = System.run(&cmd.stdin("piped\n").capture()).unwrap();
         assert_eq!(out.trim_end(), "piped");
     }
 
     #[test]
     fn run_fails_on_nonzero_exit() {
-        let err = run(&System, &shell("exit 1")).unwrap_err();
+        let err = System.run(&shell("exit 1")).unwrap_err();
         assert!(matches!(err, Error::Failed { code: Some(1), .. }), "{err:?}");
     }
 
@@ -274,7 +274,9 @@ mod tests {
 
     #[test]
     fn missing_program_is_a_spawn_error() {
-        let err = run(&System, &Cmd::new("senn-test-no-such-program")).unwrap_err();
+        let err = System
+            .run(&Cmd::new("senn-test-no-such-program"))
+            .unwrap_err();
         assert!(matches!(err, Error::Spawn { .. }), "{err:?}");
     }
 

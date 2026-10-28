@@ -9,7 +9,8 @@ use std::path::{Path, PathBuf};
 use serde::Deserialize;
 
 use crate::error::{Error, Result};
-use crate::runner::{Cmd, Runner, run};
+use crate::runner::{Cmd, Runner};
+use crate::secrets::SecretName;
 
 /// The manifest of one herd.
 #[derive(Debug, Clone, Deserialize)]
@@ -70,7 +71,7 @@ pub struct TofuSecrets {
 pub struct Host {
     /// File name in `/var/lib/senn/secrets` to secret reference.
     #[serde(default)]
-    pub secrets: BTreeMap<String, String>,
+    pub secrets: BTreeMap<SecretName, String>,
 }
 
 impl Manifest {
@@ -87,11 +88,10 @@ impl Manifest {
     ///
     /// # Errors
     ///
-    /// The errors of [`run`] if `nix build` fails, [`Error::Io`] if the result can't be
+    /// The errors of [`Runner::run`] if `nix build` fails, [`Error::Io`] if the result can't be
     /// read, and the errors of [`Manifest::parse`].
     pub fn load(runner: &dyn Runner, herd: &Path) -> Result<Self> {
-        let path = run(
-            runner,
+        let path = runner.run(
             &Cmd::new("nix")
                 .args(["build", ".#senn-manifest", "--no-link", "--print-out-paths"])
                 .cwd(herd)
@@ -133,6 +133,13 @@ pub(crate) mod tests {
         assert_eq!(m.tools.nixos_anywhere, "nixos-anywhere");
         assert_eq!(m.tofu.env["HCLOUD_TOKEN"], "op://v/hetzner/token");
         assert_eq!(m.host("cloud-a").unwrap().secrets["tailscale-authkey"], "op://v/ts/key");
+    }
+
+    #[test]
+    fn unsafe_secret_names_fail_the_parse() {
+        let json = SAMPLE.replace("tailscale-authkey", "../etc/passwd");
+        let err = Manifest::parse(&json).unwrap_err().to_string();
+        assert!(err.contains("invalid JSON"), "{err}");
     }
 
     #[test]

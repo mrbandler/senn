@@ -10,7 +10,7 @@ use serde::Deserialize;
 
 use crate::error::{Error, Result};
 use crate::manifest::Manifest;
-use crate::runner::{Cmd, Runner, run};
+use crate::runner::{Cmd, Runner};
 use crate::secrets::Secrets;
 
 /// OpenTofu, ready to run in the core root of one herd.
@@ -54,7 +54,7 @@ impl<'a> Tofu<'a> {
             env.push((name.clone(), secrets.read(reference)?));
         }
         let passphrase = secrets.read(&manifest.tofu.passphrase)?;
-        env.push(("TF_ENCRYPTION".to_owned(), encryption_config(&passphrase)));
+        env.push(("TF_ENCRYPTION".to_owned(), Self::encryption_config(&passphrase)));
 
         Ok(Self {
             runner,
@@ -78,9 +78,11 @@ impl<'a> Tofu<'a> {
     ///
     /// # Errors
     ///
-    /// The errors of [`run`].
+    /// The errors of [`Runner::run`].
     pub fn init(&self) -> Result<()> {
-        run(self.runner, &self.cmd(&["init", "-input=false"])).map(drop)
+        self.runner
+            .run(&self.cmd(&["init", "-input=false"]))
+            .map(drop)
     }
 
     /// Plans into `senn.plan` and returns whether there are changes.
@@ -105,51 +107,54 @@ impl<'a> Tofu<'a> {
     ///
     /// # Errors
     ///
-    /// The errors of [`run`].
+    /// The errors of [`Runner::run`].
     pub fn apply(&self) -> Result<()> {
-        run(self.runner, &self.cmd(&["apply", "-input=false", "senn.plan"])).map(drop)
+        self.runner
+            .run(&self.cmd(&["apply", "-input=false", "senn.plan"]))
+            .map(drop)
     }
 
     /// Reads the `hosts` output: host name to addresses.
     ///
     /// # Errors
     ///
-    /// The errors of [`run`], and [`Error::Json`] if the output has another shape.
+    /// The errors of [`Runner::run`], and [`Error::Json`] if the output has another shape.
     pub fn hosts(&self) -> Result<BTreeMap<String, HostAddr>> {
-        let out = run(self.runner, &self.cmd(&["output", "-json", "hosts"]).capture())?;
+        let out = self
+            .runner
+            .run(&self.cmd(&["output", "-json", "hosts"]).capture())?;
         Ok(serde_json::from_str(&out)?)
     }
-}
 
-/// Builds the `TF_ENCRYPTION` value: state and plan encrypted with AES-GCM and a PBKDF2
-/// key derived from `passphrase`. `enforced` stops tofu from ever writing them unencrypted.
-///
-/// The passphrase is escaped for an HCL string, including the template sequences `${`
-/// and `%{`. OpenTofu requires at least 16 characters.
-#[must_use]
-pub fn encryption_config(passphrase: &str) -> String {
-    let escaped = passphrase
-        .replace('\\', "\\\\")
-        .replace('"', "\\\"")
-        .replace("${", "$${")
-        .replace("%{", "%%{");
-    format!(
-        r#"key_provider "pbkdf2" "senn" {{
-  passphrase = "{escaped}"
-}}
-method "aes_gcm" "senn" {{
-  keys = key_provider.pbkdf2.senn
-}}
-state {{
-  method   = method.aes_gcm.senn
-  enforced = true
-}}
-plan {{
-  method   = method.aes_gcm.senn
-  enforced = true
-}}
-"#
-    )
+    /// Builds the `TF_ENCRYPTION` value: state and plan encrypted with AES-GCM and a PBKDF2
+    /// key derived from `passphrase`. `enforced` stops tofu from ever writing them unencrypted.
+    ///
+    /// The passphrase is escaped for an HCL string, including the template sequences `${`
+    /// and `%{`. OpenTofu requires at least 16 characters.
+    fn encryption_config(passphrase: &str) -> String {
+        let escaped = passphrase
+            .replace('\\', "\\\\")
+            .replace('"', "\\\"")
+            .replace("${", "$${")
+            .replace("%{", "%%{");
+        format!(
+            r#"key_provider "pbkdf2" "senn" {{
+      passphrase = "{escaped}"
+    }}
+    method "aes_gcm" "senn" {{
+      keys = key_provider.pbkdf2.senn
+    }}
+    state {{
+      method   = method.aes_gcm.senn
+      enforced = true
+    }}
+    plan {{
+      method   = method.aes_gcm.senn
+      enforced = true
+    }}
+    "#
+        )
+    }
 }
 
 #[cfg(test)]
@@ -236,7 +241,7 @@ mod tests {
 
     #[test]
     fn encryption_config_escapes_the_passphrase() {
-        let hcl = encryption_config(r#"a"b\c${d}%{e}"#);
+        let hcl = Tofu::encryption_config(r#"a"b\c${d}%{e}"#);
         assert!(hcl.contains(r#"passphrase = "a\"b\\c$${d}%%{e}""#), "{hcl}");
         assert!(hcl.contains("enforced = true"), "{hcl}");
     }
