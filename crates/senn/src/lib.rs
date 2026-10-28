@@ -8,5 +8,6 @@ mod error;
 pub mod manifest;
 pub mod protocol;
 pub mod runner;
+pub mod secrets;
 
 pub use error::{Error, Result};

@@ -46,6 +46,14 @@ pub enum Error {
     )]
     UnknownHost(String),
 
+    /// A secret name is not safe to use as a file name on a host.
+    #[error("invalid secret name `{0}`")]
+    #[diagnostic(
+        code(senn::invalid_secret_name),
+        help("use lowercase letters, digits and dashes, for example `tailscale-authkey`")
+    )]
+    InvalidSecretName(String),
+
     /// Reading or writing a file or pipe failed.
     #[error(transparent)]
     #[diagnostic(code(senn::io))]
