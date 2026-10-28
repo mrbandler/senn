@@ -7,8 +7,9 @@ use std::fs::{OpenOptions, Permissions};
 use std::io::Write;
 use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::Path;
+use std::time::{Duration, Instant};
 
-use crate::error::Result;
+use crate::error::{Error, Result};
 use crate::manifest::Manifest;
 use crate::runner::{Cmd, Runner};
 use crate::secrets::Secrets;
@@ -58,6 +59,25 @@ impl<'a> Installer<'a> {
         ]);
 
         Ok(self.runner.exec(&cmd)?.code == Some(0))
+    }
+
+    /// Waits until `host` answers over the tailnet, probing every `interval` for at most
+    /// `timeout`. A fresh install needs this: the host reboots and joins the tailnet on its own.
+    ///
+    /// # Errors
+    ///
+    /// The errors of [`Installer::is_installed`], and [`Error::NotOnTailnet`] after `timeout`.
+    pub fn wait_until_installed(&self, host: &str, timeout: Duration, interval: Duration) -> Result<()> {
+        let start = Instant::now();
+        loop {
+            if self.is_installed(host)? {
+                return Ok(());
+            }
+            if start.elapsed() >= timeout {
+                return Err(Error::NotOnTailnet(host.to_owned()));
+            }
+            std::thread::sleep(interval);
+        }
     }
 
     /// Installs NixOS on `host` at `ipv4` with nixos-anywhere.
@@ -154,6 +174,41 @@ mod tests {
             !Installer::new(&down, &m, &secrets, Path::new("/herd"))
                 .is_installed("cloud-a")
                 .unwrap()
+        );
+    }
+
+    #[test]
+    fn waits_until_the_host_answers_over_the_tailnet() {
+        let m = Manifest::parse(SAMPLE).unwrap();
+        let probes = std::rc::Rc::new(std::cell::Cell::new(0));
+        let counted = probes.clone();
+        // The third probe succeeds.
+        let fake = Fake::new(move |_| {
+            counted.set(counted.get() + 1);
+            (counted.get() >= 3).then(String::new)
+        });
+        let secrets = Secrets::new(&fake, "backend");
+        let installer = Installer::new(&fake, &m, &secrets, Path::new("/herd"));
+
+        installer
+            .wait_until_installed("cloud-a", Duration::from_secs(60), Duration::ZERO)
+            .unwrap();
+
+        assert_eq!(probes.get(), 3);
+    }
+
+    #[test]
+    fn gives_up_when_the_host_never_answers() {
+        let m = Manifest::parse(SAMPLE).unwrap();
+        let fake = Fake::new(|_| None);
+        let secrets = Secrets::new(&fake, "backend");
+        let installer = Installer::new(&fake, &m, &secrets, Path::new("/herd"));
+
+        let result = installer.wait_until_installed("cloud-a", Duration::ZERO, Duration::ZERO);
+
+        assert!(
+            matches!(result, Err(Error::NotOnTailnet(ref h)) if h == "cloud-a"),
+            "{result:?}"
         );
     }
 
