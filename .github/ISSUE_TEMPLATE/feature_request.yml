@@ -24,8 +24,9 @@ body:
       label: Area
       description: Which part of senn does this feature relate to?
       options:
-        - Library (senn)
-        - CLI (senn-cli)
+        - CLI (senn)
+        - Nix module, presets or template
+        - Secrets backends
         - Documentation
         - Other
     validations:

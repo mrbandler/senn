@@ -1,0 +1,25 @@
+name: FlakeHub
+
+# Publishes the flake to https://flakehub.com/flake/mrbandler/senn for every release tag.
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions: {}
+
+jobs:
+  publish:
+    name: Publish the flake
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # FlakeHub authenticates this workflow by its OIDC token
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/determinate-nix-action@92957199488000b908fdad19f63711000965d8f3 # v3.24.1
+      - uses: DeterminateSystems/flakehub-push@e001ee821cdb763ef120c01f1048bfb2f938bb9c # v7
+        with:
+          visibility: public

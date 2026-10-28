@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Senn: an old alpine herdsman with a white beard and a pipe, in front of mountains</title>
+  <defs>
+    <clipPath id="disc"><circle cx="256" cy="256" r="248"/></clipPath>
+    <!-- beard: darkest at the lips (focal point), reaching further down than out to the ears -->
+    <radialGradient id="beard" gradientUnits="userSpaceOnUse" cx="256" cy="330" r="150" fx="256" fy="294">
+      <stop offset="0" stop-color="#6f7882"/>
+      <stop offset="0.2" stop-color="#8a929c"/>
+      <stop offset="0.6" stop-color="#ffffff"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#disc)">
+    <!-- sky and two peaks -->
+    <rect width="512" height="512" fill="#a8d8ee"/>
+    <path d="M0 360 L130 170 L230 300 L360 140 L512 340 L512 512 L0 512 Z" fill="#4f6d8c"/>
+    <path d="M130 170 L104 208 L150 196 Z M360 140 L334 172 L390 180 Z" fill="#ffffff"/>
+    <!-- red vest -->
+    <path d="M86 512 Q96 396 256 386 Q416 396 426 512 Z" fill="#c8102e"/>
+    <!-- head -->
+    <circle cx="178" cy="262" r="16" fill="#efc09a"/>
+    <circle cx="334" cy="262" r="16" fill="#efc09a"/>
+    <circle cx="256" cy="256" r="78" fill="#efc09a"/>
+    <!-- Ohrschuefe on his right ear -->
+    <circle cx="172" cy="284" r="7" fill="#e8b923"/>
+    <!-- eyes under bushy white brows -->
+    <circle cx="232" cy="252" r="7" fill="#1f1f1f"/>
+    <circle cx="280" cy="252" r="7" fill="#1f1f1f"/>
+    <path d="M206 242 Q226 220 250 238 Q228 234 206 242 Z M306 242 Q286 220 262 238 Q284 234 306 242 Z" fill="#ffffff"/>
+    <!-- one shape for beard and moustache -->
+    <path d="M184 244 Q186 280 206 292 Q232 274 256 290 Q280 274 306 292 Q326 280 328 244 Q346 330 316 392 Q290 444 256 456 Q222 444 196 392 Q166 330 184 244 Z" fill="url(#beard)"/>
+    <circle cx="256" cy="276" r="14" fill="#e2a27a"/>
+    <!-- Lindauerli pipe with a silver lid -->
+    <path d="M276 300 Q300 322 322 316" fill="none" stroke="#5a3319" stroke-width="10" stroke-linecap="round"/>
+    <path d="M314 296 L342 296 L338 330 Q328 338 318 330 Z" fill="#6b3f22"/>
+    <rect x="310" y="286" width="36" height="12" rx="6" fill="#b9bec6"/>
+    <!-- hat: low round crown, short brim, flowers -->
+    <path d="M190 200 L192 150 Q196 120 256 118 Q316 120 320 150 L322 200 Z" fill="#1f1f1f"/>
+    <rect x="190" y="178" width="132" height="12" fill="#c8102e"/>
+    <ellipse cx="256" cy="202" rx="118" ry="17" fill="#1f1f1f"/>
+    <circle cx="214" cy="160" r="9" fill="#ffffff"/>
+    <circle cx="234" cy="152" r="9" fill="#e8b923"/>
+    <circle cx="254" cy="148" r="9" fill="#f08a8a"/>
+  </g>
+</svg>
