@@ -22,7 +22,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of senn are you using?
+      description: What version of senn are you using? The output of `senn --version`.
       placeholder: "0.1.0"
     validations:
       required: true

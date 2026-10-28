@@ -37,17 +37,22 @@
 
 <!-- Describe any manual testing you did -->
 
+## AI assistance
+
+<!-- See AI_POLICY.md. Name the tool and say in what way it helped, or write "None". -->
+
+- **Tool:**
+- **Used for:**
+
 ## Checklist
 
 <!-- Mark completed items with an [x] -->
 
 - [ ] My code follows the project's coding standards
-- [ ] I have run `cargo fmt --all` to format my code
-- [ ] I have run `cargo clippy --workspace --all-targets --all-features -- -D warnings` with no warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] I have updated the documentation accordingly
 - [ ] The PR title is a [conventional commit](https://www.conventionalcommits.org) (e.g. `feat: add x`); it becomes the squash commit message
-- [ ] My changes generate no new warnings
+- [ ] I understand the change and can answer the review myself, with or without AI
 
 ## Additional Notes
 
