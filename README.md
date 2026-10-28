@@ -9,12 +9,16 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/mrbandler/senn/actions/workflows/ci.yml"><img src="https://github.com/mrbandler/senn/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://crates.io/crates/senn-cli"><img src="https://img.shields.io/crates/v/senn-cli.svg" alt="crates.io"></a>
-  <a href="https://mrbandler.github.io/senn/"><img src="https://img.shields.io/badge/docs-book-blue.svg" alt="Book"></a>
-  <a href="https://flakehub.com/flake/mrbandler/senn"><img src="https://img.shields.io/endpoint?url=https://flakehub.com/f/mrbandler/senn/badge" alt="FlakeHub"></a>
-  <a href="https://builtwithnix.org"><img src="https://builtwithnix.org/badge.svg" alt="Built with Nix"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/crates/l/senn-cli.svg" alt="License: MIT"></a>
+  <a href="https://www.rust-lang.org"><img src="https://img.shields.io/badge/built_with-Rust-dea584?logo=rust&logoColor=white&style=flat-square" alt="Built with Rust"></a>
+  <a href="https://builtwithnix.org"><img src="https://img.shields.io/badge/built_with-Nix-5277c3?logo=nixos&logoColor=white&style=flat-square" alt="Built with Nix"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/mrbandler/senn/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mrbandler/senn/ci.yml?branch=main&label=CI&logo=github&style=flat-square" alt="CI"></a>
+  <a href="https://crates.io/crates/senn-cli"><img src="https://img.shields.io/crates/v/senn-cli.svg?logo=rust&style=flat-square" alt="crates.io"></a>
+  <a href="https://flakehub.com/flake/mrbandler/senn"><img src="https://img.shields.io/endpoint?url=https://flakehub.com/f/mrbandler/senn/badge&style=flat-square" alt="FlakeHub"></a>
+  <a href="https://mrbandler.github.io/senn/"><img src="https://img.shields.io/badge/docs-book-blue.svg?logo=mdbook&style=flat-square" alt="Book"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/crates/l/senn-cli.svg?style=flat-square" alt="License: MIT"></a>
 </p>
 
 > [!WARNING]
