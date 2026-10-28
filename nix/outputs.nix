@@ -15,7 +15,7 @@ in
   den.systems = lib.mkDefault [
     "x86_64-linux"
     "aarch64-linux"
-    "x86_64-darwin"
+    # No x86_64-darwin: nixpkgs dropped it with 26.11.
     "aarch64-darwin"
   ];
 
