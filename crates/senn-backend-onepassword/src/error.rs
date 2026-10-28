@@ -19,7 +19,7 @@ pub enum Error {
     )]
     InvalidRequest(#[source] serde_json::Error),
 
-    /// The request uses a protocol version other than [`senn::protocol::VERSION`].
+    /// The request uses a protocol version other than [`senn_protocol::VERSION`].
     #[error("unsupported protocol version {0}")]
     #[diagnostic(
         code(senn_backend_onepassword::unsupported_protocol),

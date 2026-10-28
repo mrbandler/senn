@@ -1,4 +1,4 @@
-//! 1Password secrets backend of Senn, protocol 1 (see [`senn::protocol`]).
+//! 1Password secrets backend of Senn, protocol 1 (see [`senn_protocol`]).
 //!
 //! Reads one request from stdin, fetches the secret with `op read` and writes the
 //! response to stdout. Errors go to stderr as miette diagnostics and never contain a value.
@@ -11,7 +11,7 @@ mod error;
 use std::io::Write;
 use std::process::{Command, Stdio};
 
-use senn::protocol::{Action, Request, Response, VERSION};
+use senn_protocol::{Action, Request, Response, VERSION};
 
 use crate::error::Error;
 

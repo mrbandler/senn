@@ -1,4 +1,4 @@
-//! Secrets backend protocol, version 1.
+//! The secrets backend protocol of Senn, version 1.
 //!
 //! A backend is a program that turns a secret reference into the secret. Senn starts it
 //! once per secret, writes one [`Request`] as JSON to its stdin and reads one
@@ -51,7 +51,7 @@ impl Request {
     /// # Examples
     ///
     /// ```
-    /// use senn::protocol::Request;
+    /// use senn_protocol::Request;
     ///
     /// let json = serde_json::to_string(&Request::read("op://vault/item/field")).unwrap();
     /// assert_eq!(json, r#"{"protocol":1,"action":"read","ref":"op://vault/item/field"}"#);
