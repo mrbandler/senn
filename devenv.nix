@@ -17,6 +17,8 @@
     typos
     zizmor
     mdbook
+    # `just reserve-crate`
+    jq
   ];
 
   env.RUST_BACKTRACE = "1";
