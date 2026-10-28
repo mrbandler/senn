@@ -2,7 +2,7 @@
   <img src="docs/src/images/senn.svg" alt="Senn, a cartoon alpine herdsman" width="160">
 </p>
 
-<h1 align="center">senn</h1>
+<h1 align="center">Senn</h1>
 
 <p align="center">
   Git-native infrastructure for single operators, built on Nix and OpenTofu, driven by one CLI.
@@ -115,7 +115,7 @@ The [book](https://mrbandler.github.io/senn/) has the details.
 
 ## The name
 
-A Senn is the alpine herdsman who takes the herd up to the mountain pasture for the summer and
+A [Senn](https://en.wikipedia.org/wiki/Senn_(occupation)) is the alpine herdsman who takes the herd up to the mountain pasture for the summer and
 looks after it there. Your hosts are cattle, not pets, and Senn tends them.
 
 ## Contributing
