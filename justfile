@@ -1,5 +1,3 @@
-set windows-shell := ["pwsh", "-NoLogo", "-NoProfile", "-Command"]
-
 # List recipes
 default:
     @just --list
@@ -54,11 +52,9 @@ gh-setup:
     @echo "GitHub Pages enabled, built by Actions"
 
 # Fail if a published workspace crate is not on crates.io yet (CI runs this in every PR)
-[unix]
 crates-reserved:
     scripts/crates-reserved.sh
 
 # Reserve a new crate name on crates.io and hand it to trusted publishing (needs an API token)
-[unix]
 reserve-crate name:
     scripts/reserve-crate.sh {{ name }}

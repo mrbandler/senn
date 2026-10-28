@@ -36,7 +36,6 @@ body:
         - Linux
         - macOS (Intel)
         - macOS (Apple Silicon)
-        - Windows
         - Other (specify in description)
     validations:
       required: true

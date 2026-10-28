@@ -4,7 +4,7 @@ members = ["cargo:."]
 [dist]
 cargo-dist-version = "0.33.0"
 ci = "github"
-installers = ["shell", "powershell", "homebrew", "msi"]
+installers = ["shell", "homebrew"]
 tap = "mrbandler/homebrew-tap"
 publish-jobs = ["homebrew"]
 targets = [
@@ -13,7 +13,6 @@ targets = [
     "aarch64-unknown-linux-gnu",
     "x86_64-unknown-linux-gnu",
     "x86_64-unknown-linux-musl",
-    "x86_64-pc-windows-msvc",
 ]
 install-path = "CARGO_HOME"
 install-updater = false

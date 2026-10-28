@@ -237,27 +237,22 @@ pub mod fake {
 mod tests {
     use super::*;
 
-    /// A shell command on the test platform: `sh -c` on Unix, `cmd /C` on Windows.
     fn shell(script: &str) -> Cmd {
-        if cfg!(windows) {
-            Cmd::new("cmd").args(["/C", script])
-        } else {
-            Cmd::new("sh").args(["-c", script])
-        }
+        Cmd::new("sh").args(["-c", script])
     }
 
     #[test]
     fn run_captures_stdout() {
         let out = System.run(&shell("echo hello").capture()).unwrap();
-        assert_eq!(out.trim_end(), "hello");
+        assert_eq!(out, "hello\n");
     }
 
     #[test]
     fn run_feeds_stdin() {
-        // `sort` with one line prints it unchanged; Windows has no `cat`.
-        let cmd = Cmd::new(if cfg!(windows) { "sort" } else { "cat" });
-        let out = System.run(&cmd.stdin("piped\n").capture()).unwrap();
-        assert_eq!(out.trim_end(), "piped");
+        let out = System
+            .run(&Cmd::new("cat").stdin("piped").capture())
+            .unwrap();
+        assert_eq!(out, "piped");
     }
 
     #[test]

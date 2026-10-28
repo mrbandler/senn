@@ -45,12 +45,6 @@ dist = true
 # Homebrew formula named after the command, not the package.
 formula = "senn"
 
-[package.metadata.wix]
-upgrade-guid = "34307908-0529-4279-B02F-8D34FD6B14F5"
-path-guid = "4B15510B-AE43-490C-A984-0F11D73410F2"
-license = false
-eula = false
-
 [workspace]
 resolver = "3"
 members = [
