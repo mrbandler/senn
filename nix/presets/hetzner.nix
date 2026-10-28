@@ -61,15 +61,34 @@
       inputs.srvos.nixosModules.hardware-hetzner-cloud
       inputs.disko.nixosModules.disko
     ];
+    # GRUB for both firmware types (see the partitions below). As the removable EFI path
+    # (\EFI\BOOT\BOOTX64.EFI) it needs no NVRAM entry, which a fresh VM doesn't have.
+    boot.loader.grub = {
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+    };
     disko.devices.disk.main = {
       type = "disk";
       device = "/dev/sda";
       content = {
         type = "gpt";
+        # Hetzner Cloud boots some server types with BIOS and others with UEFI, so the disk
+        # carries both: a BIOS boot partition for GRUB's i386-pc stage and an EFI system
+        # partition for its x86_64-efi image.
         partitions = {
-          boot = {
+          bios = {
             size = "1M";
             type = "EF02";
+          };
+          esp = {
+            size = "512M";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+              mountOptions = [ "umask=0077" ];
+            };
           };
           root = {
             size = "100%";
