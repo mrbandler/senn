@@ -25,8 +25,11 @@ pub enum Error {
     },
 
     /// A program exited non-zero. Its own error output is already on the terminal.
-    #[error("`{program}` failed (exit code {code:?})")]
-    #[diagnostic(code(senn::failed), help("the output of `{program}` above shows the cause"))]
+    #[error(
+        "`{program}` failed {}",
+        code.map_or_else(|| "(ended by a signal)".to_owned(), |c| format!("with exit code {c}"))
+    )]
+    #[diagnostic(code(senn::failed), help("the output above shows the cause"))]
     Failed {
         /// The program that failed.
         program: String,
@@ -55,6 +58,11 @@ pub enum Error {
         help("use lowercase letters, digits and dashes, for example `tailscale-authkey`")
     )]
     InvalidSecretName(String),
+
+    /// The operator declined the plan. Nothing was changed.
+    #[error("aborted, nothing was changed")]
+    #[diagnostic(code(senn::aborted))]
+    Aborted,
 
     /// Reading or writing a file or pipe failed.
     #[error(transparent)]

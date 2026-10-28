@@ -6,6 +6,7 @@
 
 pub mod deployer;
 mod error;
+pub mod herd;
 pub mod installer;
 pub mod manifest;
 pub mod protocol;

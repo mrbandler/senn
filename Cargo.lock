@@ -536,6 +536,8 @@ name = "senn-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "miette",
+ "senn",
  "tracing",
  "tracing-subscriber",
 ]
