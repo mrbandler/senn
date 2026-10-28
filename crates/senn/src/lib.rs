@@ -4,6 +4,7 @@
 //! are internal to Senn and have no stable API. [`protocol`] is the exception: it holds
 //! the types of the secrets backend protocol, for backends written in Rust.
 
+pub mod deployer;
 mod error;
 pub mod installer;
 pub mod manifest;
