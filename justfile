@@ -44,10 +44,14 @@ check: lint test features deps doc
 
 # Apply GitHub repo settings: main ruleset, squash-only merges, Pages via Actions (needs gh).
 # One-shot: re-running fails (ruleset name exists -> 422, Pages already enabled -> 409).
+# --silent: no response body and no pager to quit; errors still show.
 gh-setup:
-    gh api --method POST "repos/{owner}/{repo}/rulesets" --input .github/rulesets/main.json
-    gh api --method PATCH "repos/{owner}/{repo}" -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false -F delete_branch_on_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
-    gh api --method POST "repos/{owner}/{repo}/pages" -f build_type=workflow
+    @gh api --silent --method POST "repos/{owner}/{repo}/rulesets" --input .github/rulesets/main.json
+    @echo "ruleset for main created (.github/rulesets/main.json)"
+    @gh api --silent --method PATCH "repos/{owner}/{repo}" -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false -F delete_branch_on_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
+    @echo "merges: squash only, PR title and body as commit message, branches deleted after merge"
+    @gh api --silent --method POST "repos/{owner}/{repo}/pages" -f build_type=workflow
+    @echo "GitHub Pages enabled, built by Actions"
 
 # Fail if a published workspace crate is not on crates.io yet (CI runs this in every PR)
 [unix]
