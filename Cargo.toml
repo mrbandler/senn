@@ -1,7 +1,62 @@
+# The root package is the CLI (like ripgrep): its sources live in crates/senn-cli/, and the
+# root directory makes nix/, template/ and flake.nix part of it.
+[package]
+name = "senn-cli"
+description = "Git-native infrastructure for single operators, built on Nix and OpenTofu."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+# The CLI is the product: its sources, the Nix module and the herd template. A change to any of
+# these files releases a new version (release-plz looks at the packaged files).
+include = [
+    "crates/senn-cli/**",
+    "nix/**",
+    "template/**",
+    "/flake.nix",
+    "/flake.lock",
+    "/README.md",
+    "/LICENSE",
+]
+
+# The package is `<name>-cli` because the library owns `<name>`; the command is still `<name>`.
+[[bin]]
+name = "senn"
+path = "crates/senn-cli/src/main.rs"
+# Shares its name with the library, so `cargo doc` would overwrite the library docs (cargo#6313).
+doc = false
+
+[dependencies]
+senn.workspace = true
+clap.workspace = true
+miette = { workspace = true, features = ["fancy"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[lints]
+workspace = true
+
+[package.metadata.dist]
+dist = true
+# Homebrew formula named after the command, not the package.
+formula = "senn"
+
+[package.metadata.wix]
+upgrade-guid = "34307908-0529-4279-B02F-8D34FD6B14F5"
+path-guid = "4B15510B-AE43-490C-A984-0F11D73410F2"
+license = false
+eula = false
+
 [workspace]
 resolver = "3"
 members = [
-    "crates/*",
+    ".",
+    "crates/senn",
+    "crates/senn-backend-onepassword",
 ]
 
 [workspace.package]

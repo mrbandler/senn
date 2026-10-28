@@ -69,7 +69,7 @@
 
         <Package Id='*'
             Keywords='Installer'
-            Description='Command-line interface of senn.'
+            Description='Git-native infrastructure for single operators, built on Nix and OpenTofu.'
             Manufacturer='mrbandler'
             InstallerVersion='450'
             Languages='1033'
