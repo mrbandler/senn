@@ -29,7 +29,7 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
         with:
-          tool: prek,typos,zizmor,cargo-deny,cargo-shear,cargo-hack
+          tool: prek,typos,zizmor,cargo-deny,cargo-shear,cargo-hack,just
       - name: Pre-commit hooks
         run: prek run --all-files --show-diff-on-failure
         env:
@@ -40,6 +40,8 @@ jobs:
         run: cargo shear
       - name: Each feature on its own
         run: cargo hack check --workspace --each-feature --no-dev-deps
+      - name: Published crates exist on crates.io
+        run: just crates-reserved
 
   test:
     name: Test (${{ matrix.os }})

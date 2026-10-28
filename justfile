@@ -49,6 +49,26 @@ gh-setup:
     gh api --method PATCH "repos/{owner}/{repo}" -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false -F delete_branch_on_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
     gh api --method POST "repos/{owner}/{repo}/pages" -f build_type=workflow
 
+# Fail if a published workspace crate is not on crates.io yet (CI runs this in every PR)
+[unix]
+crates-reserved:
+    #!/usr/bin/env bash
+    # A new crate needs one first publish with an API token before release-plz can publish it
+    # through trusted publishing. This catches a missing one in its PR, not at release time.
+    set -euo pipefail
+    agent="senn crates-reserved (github.com/mrbandler/senn)"
+    missing=0
+    # `publish = false` shows up as an empty list; every other crate goes to crates.io.
+    for crate in $(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.publish != []) | .name'); do
+      status="$(curl -sS -o /dev/null -w '%{http_code}' -A "$agent" "https://crates.io/api/v1/crates/$crate")"
+      case "$status" in
+        200) echo "$crate: reserved" ;;
+        404) echo "$crate is not on crates.io yet. Run: just reserve-crate $crate" >&2; missing=1 ;;
+        *) echo "crates.io: lookup of $crate failed with HTTP $status" >&2; exit 1 ;;
+      esac
+    done
+    exit "$missing"
+
 # Reserve a new crate name on crates.io and hand it to trusted publishing (needs an API token)
 [unix]
 reserve-crate name:
