@@ -6,6 +6,7 @@ senn — Rust workspace (edition 2024).
 
 - `crates/senn` — library: typed errors with `thiserror` + `miette::Diagnostic`.
 - `crates/senn-cli` — sources of binary `senn` (`clap`, renders errors with `miette` fancy, logs via `tracing`/`RUST_LOG`). Its manifest is the root `Cargo.toml` (package `senn-cli`, like ripgrep), so `nix/`, `template/` and `flake.nix` belong to the CLI package and release with it.
+- `crates/senn-protocol` — types of the secrets backend protocol (only `serde`), for backends written in Rust.
 - `crates/senn-backend-onepassword` — 1Password secrets backend, a Nix package only (`publish = false`).
 - One version for everything (`version_group` in `release-plz.toml`); one tag `vX.Y.Z` per release.
 

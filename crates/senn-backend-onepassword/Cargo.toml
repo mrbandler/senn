@@ -13,7 +13,7 @@ homepage.workspace = true
 readme.workspace = true
 
 [dependencies]
-senn.workspace = true
+senn-protocol.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 miette = { workspace = true, features = ["fancy"] }

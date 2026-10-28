@@ -1,10 +1,10 @@
-//! Client side of the secrets backend protocol (see [`crate::protocol`]).
+//! Client side of the secrets backend protocol (see the `senn-protocol` crate).
 
 use crate::error::{Error, Result};
-use crate::protocol::{Request, Response};
 use std::borrow::Borrow;
 use std::fmt;
 
+use senn_protocol::{Request, Response};
 use serde::Deserialize;
 
 use crate::runner::{Cmd, Runner};

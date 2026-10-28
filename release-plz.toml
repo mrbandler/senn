@@ -24,12 +24,17 @@ commit_parsers = [
     { message = "^revert", group = "<!-- 9 -->⏪ Reverts" },
 ]
 
-# One version for the whole product: the library moves in lockstep with the CLI, and the CLI
+# One version for the whole product: the libraries move in lockstep with the CLI, and the CLI
 # package also covers nix/ and template/ (see `include` in Cargo.toml).
 [[package]]
 name = "senn"
 version_group = "senn"
 # The single release tag comes from the CLI.
+git_tag_enable = false
+
+[[package]]
+name = "senn-protocol"
+version_group = "senn"
 git_tag_enable = false
 
 [[package]]

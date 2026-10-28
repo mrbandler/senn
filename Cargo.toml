@@ -57,6 +57,7 @@ members = [
     ".",
     "crates/senn",
     "crates/senn-backend-onepassword",
+    "crates/senn-protocol",
 ]
 
 [workspace.package]
@@ -73,6 +74,7 @@ readme = "README.md"
 thiserror = "2.0"
 miette = { version = "7.6", default-features = false, features = ["derive"] }
 senn = { path = "crates/senn", version = "0.1.0" }
+senn-protocol = { path = "crates/senn-protocol", version = "0.1.0" }
 clap = { version = "4.6", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }

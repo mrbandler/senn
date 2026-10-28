@@ -515,6 +515,7 @@ name = "senn"
 version = "0.1.0"
 dependencies = [
  "miette",
+ "senn-protocol",
  "serde",
  "serde_json",
  "tempfile",
@@ -526,7 +527,7 @@ name = "senn-backend-onepassword"
 version = "0.1.0"
 dependencies = [
  "miette",
- "senn",
+ "senn-protocol",
  "serde_json",
  "thiserror",
 ]
@@ -540,6 +541,14 @@ dependencies = [
  "senn",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "senn-protocol"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
