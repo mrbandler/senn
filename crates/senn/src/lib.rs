@@ -5,6 +5,7 @@
 //! the types of the secrets backend protocol, for backends written in Rust.
 
 mod error;
+pub mod installer;
 pub mod manifest;
 pub mod protocol;
 pub mod runner;
