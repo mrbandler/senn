@@ -33,3 +33,8 @@ git_only = true
 git_release_enable = false
 # dist takes the GitHub Release notes from a top-level CHANGELOG.md.
 changelog_path = "./CHANGELOG.md"
+
+# Shipped as a Nix package from this repo; no crates.io release, no tag.
+[[package]]
+name = "senn-backend-onepassword"
+release = false

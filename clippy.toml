@@ -5,3 +5,5 @@ too-many-arguments-threshold = 7
 max-struct-bools = 3
 allowed-idents-below-min-chars = ["i", "j", "k", "n", "x", "y", "id", "db"]
 type-complexity-threshold = 250
+# Product names, not code; ".." keeps the defaults (GitHub, ...).
+doc-valid-idents = ["OpenTofu", "OpenSSH", ".."]

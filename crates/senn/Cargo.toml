@@ -13,6 +13,9 @@ readme.workspace = true
 [dependencies]
 miette.workspace = true
 thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
 
 [lints]
 workspace = true

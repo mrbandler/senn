@@ -1,25 +1,17 @@
-//! The `senn` library.
+//! The logic of Senn, a Git-native infrastructure tool for single operators.
+//!
+//! The `senn` command (crate `senn-cli`) is a thin layer over this crate. Most modules
+//! are internal to Senn and have no stable API. [`protocol`] is the exception: it holds
+//! the types of the secrets backend protocol, for backends written in Rust.
 
+pub mod deployer;
 mod error;
+pub mod herd;
+pub mod installer;
+pub mod manifest;
+pub mod protocol;
+pub mod runner;
+pub mod secrets;
+pub mod tofu;
 
 pub use error::{Error, Result};
-
-/// Builds a greeting for `name`.
-///
-/// # Errors
-///
-/// Returns [`Error::EmptyName`] if `name` is empty or whitespace only.
-///
-/// # Examples
-///
-/// ```
-/// assert_eq!(senn::greet("world")?, "Hello, world!");
-/// # Ok::<(), senn::Error>(())
-/// ```
-pub fn greet(name: &str) -> Result<String> {
-    let name = name.trim();
-    if name.is_empty() {
-        return Err(Error::EmptyName);
-    }
-    Ok(format!("Hello, {name}!"))
-}
