@@ -3,8 +3,9 @@
 //! Runs outside of OpenTofu, so no secret ever enters the tofu state. The install key and
 //! the host secrets exist only in a private temporary directory during the install.
 
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, Permissions};
 use std::io::Write;
+use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 use std::path::Path;
 
 use crate::error::Result;
@@ -103,23 +104,20 @@ impl<'a> Installer<'a> {
             .map(drop)
     }
 
-    /// Creates a new file only the owner can read (mode 0600 on Unix).
+    /// Creates a new file only the owner can read (mode 0600).
     fn write_private(path: &Path, contents: &str) -> std::io::Result<()> {
-        let mut options = OpenOptions::new();
-        options.write(true).create_new(true);
-        #[cfg(unix)]
-        std::os::unix::fs::OpenOptionsExt::mode(&mut options, 0o600);
-
-        options.open(path)?.write_all(contents.as_bytes())
+        OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(path)?
+            .write_all(contents.as_bytes())
     }
 
-    /// Creates `dir` and its parents; `dir` itself gets mode 0700 on Unix.
+    /// Creates `dir` and its parents; `dir` itself gets mode 0700.
     fn create_private_dir(dir: &Path) -> std::io::Result<()> {
         std::fs::create_dir_all(dir)?;
-        #[cfg(unix)]
-        std::fs::set_permissions(dir, std::os::unix::fs::PermissionsExt::from_mode(0o700))?;
-
-        Ok(())
+        std::fs::set_permissions(dir, Permissions::from_mode(0o700))
     }
 }
 
@@ -132,9 +130,7 @@ mod tests {
     use crate::runner::fake::Fake;
 
     /// The permission bits of `path`.
-    #[cfg(unix)]
     fn mode(path: &Path) -> u32 {
-        use std::os::unix::fs::PermissionsExt;
         std::fs::metadata(path).unwrap().permissions().mode() & 0o777
     }
 
@@ -183,12 +179,9 @@ mod tests {
                 let dir = arg("--extra-files").join("var/lib/senn/secrets");
                 let secret = dir.join("tailscale-authkey");
                 assert_eq!(std::fs::read_to_string(&secret).unwrap(), "value-of-op://v/ts/key");
-                #[cfg(unix)]
-                {
-                    assert_eq!(mode(&key), 0o600);
-                    assert_eq!(mode(&secret), 0o600);
-                    assert_eq!(mode(&dir), 0o700);
-                }
+                assert_eq!(mode(&key), 0o600);
+                assert_eq!(mode(&secret), 0o600);
+                assert_eq!(mode(&dir), 0o700);
                 *seen_in_fake.borrow_mut() = Some(key);
                 Some(String::new())
             },
