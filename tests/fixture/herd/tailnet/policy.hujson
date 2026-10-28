@@ -1,0 +1,9 @@
+{
+  // Fixture policy: hosts advertise tag:server.
+  "tagOwners": {
+    "tag:server": ["autogroup:admin"],
+  },
+  "grants": [
+    {"src": ["*"], "dst": ["*"], "ip": ["*"]},
+  ],
+}

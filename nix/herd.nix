@@ -25,10 +25,23 @@ in
         description = "Secret reference to the install key's private half.";
       };
     };
-    tailnet.tags = mkOption {
-      type = types.listOf types.str;
-      default = [ "tag:server" ];
-      description = "Tailscale tags every host advertises.";
+    tailnet = {
+      tags = mkOption {
+        type = types.listOf types.str;
+        default = [ "tag:server" ];
+        description = "Tailscale tags every host advertises.";
+      };
+      policy = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          The tailnet policy file (HuJSON), kept in the herd repo. When set, Senn manages the
+          tailnet's policy from it and keeps MagicDNS on. On the first apply, the current policy
+          is imported, so put your existing policy into this file first. The Tailscale provider
+          logs in through TAILSCALE_OAUTH_CLIENT_ID and TAILSCALE_OAUTH_CLIENT_SECRET in
+          `tofu.env`; the credential needs the scopes policy_file and dns (write).
+        '';
+      };
     };
     secrets.backend = mkOption {
       type = types.functionTo types.package;

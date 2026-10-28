@@ -1,0 +1,11 @@
+{
+  // The tailnet policy, applied by `senn apply`. Replace this with your current policy
+  // (admin console, Access controls) before the first apply, or it overwrites it.
+  // Hosts advertise tag:server; admins own the tag, so they can tag hosts.
+  "tagOwners": {
+    "tag:server": ["autogroup:admin"],
+  },
+  "grants": [
+    {"src": ["*"], "dst": ["*"], "ip": ["*"]},
+  ],
+}
