@@ -18,6 +18,7 @@ pub enum Error {
     Spawn {
         /// The program Senn tried to start.
         program: String,
+
         /// Why it could not be started.
         #[source]
         source: std::io::Error,
@@ -29,6 +30,7 @@ pub enum Error {
     Failed {
         /// The program that failed.
         program: String,
+
         /// Its exit code, `None` if a signal ended it.
         code: Option<i32>,
     },

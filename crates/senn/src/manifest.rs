@@ -17,14 +17,19 @@ use crate::runner::{Cmd, Runner, run};
 pub struct Manifest {
     /// Name of the herd (`senn.herd.name`).
     pub herd: String,
+
     /// Store paths of the tools, pinned by the herd's `flake.lock`.
     pub tools: Tools,
+
     /// The generated OpenTofu config of the core root (`main.tf.json`).
     pub core: PathBuf,
+
     /// Secrets OpenTofu needs.
     pub tofu: TofuSecrets,
+
     /// Secret reference to the private half of the install key.
     pub install_key: String,
+
     /// Hosts by name.
     pub hosts: BTreeMap<String, Host>,
 }
@@ -35,12 +40,16 @@ pub struct Manifest {
 pub struct Tools {
     /// OpenTofu, with the providers of the herd.
     pub tofu: String,
+
     /// nixos-anywhere, for the first install.
     pub nixos_anywhere: String,
+
     /// deploy-rs, for updates.
     pub deploy: String,
+
     /// The secrets backend (see [`crate::protocol`]).
     pub backend: String,
+
     /// OpenSSH client.
     pub ssh: String,
 }
@@ -50,6 +59,7 @@ pub struct Tools {
 pub struct TofuSecrets {
     /// Reference to the passphrase for state encryption.
     pub passphrase: String,
+
     /// Environment variable name to secret reference, for providers (for example `HCLOUD_TOKEN`).
     #[serde(default)]
     pub env: BTreeMap<String, String>,

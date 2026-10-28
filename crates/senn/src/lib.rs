@@ -9,5 +9,6 @@ pub mod manifest;
 pub mod protocol;
 pub mod runner;
 pub mod secrets;
+pub mod tofu;
 
 pub use error::{Error, Result};
