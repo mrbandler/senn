@@ -6,8 +6,10 @@ use thiserror::Error;
 /// Errors returned by this crate.
 ///
 /// Each variant is a [`Diagnostic`], so the CLI can render it with a code and a help text.
-/// Messages name programs, hosts and secret references, never secret values.
+/// Messages name programs, hosts and secret references, never secret values. New variants
+/// can come in any release.
 #[derive(Debug, Error, Diagnostic)]
+#[non_exhaustive]
 pub enum Error {
     /// A program could not be started, usually because it is not on `PATH`.
     #[error("cannot start `{program}`")]

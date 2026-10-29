@@ -45,6 +45,8 @@ trait Vault {
                 let value = self.read(&reference)?;
                 serde_json::to_string(&Response { value }).map_err(Error::Encode)
             },
+            // An action of a newer protocol; parsing rejects unknown names already.
+            _ => Err(Error::UnsupportedAction),
         }
     }
 }

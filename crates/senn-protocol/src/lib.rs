@@ -26,8 +26,12 @@ pub struct Request {
 }
 
 /// The actions of protocol 1. The variant name is the `action` field on the wire.
+///
+/// Later protocol versions can add actions, so a backend matches with a `_` arm that
+/// rejects an action it doesn't know.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum Action {
     /// Read the secret at a reference, for example `op://vault/item/field`.
     Read {

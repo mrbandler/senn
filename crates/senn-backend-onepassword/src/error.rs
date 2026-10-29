@@ -27,6 +27,14 @@ pub enum Error {
     )]
     UnsupportedProtocol(u32),
 
+    /// The request has an action this backend doesn't implement.
+    #[error("unsupported action")]
+    #[diagnostic(
+        code(senn_backend_onepassword::unsupported_action),
+        help("this backend implements the actions of protocol 1: read")
+    )]
+    UnsupportedAction,
+
     /// `op` could not be started, usually because it is not on `PATH`.
     #[error("cannot run `op`")]
     #[diagnostic(
