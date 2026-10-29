@@ -51,6 +51,17 @@ pub enum Error {
     )]
     UnknownHost(String),
 
+    /// A freshly installed host did not show up on the tailnet in time.
+    #[error("`{0}` did not come up on the tailnet")]
+    #[diagnostic(
+        code(senn::not_on_tailnet),
+        help(
+            "the install finished, but the host never answered over the tailnet; open its provider \
+             console and check that it booted and that tailscaled joined"
+        )
+    )]
+    NotOnTailnet(String),
+
     /// A secret name is not safe to use as a file name on a host.
     #[error("invalid secret name `{0}`")]
     #[diagnostic(

@@ -34,6 +34,18 @@ in
             };
             extraUpFlags = [ "--advertise-tags=${lib.concatStringsSep "," cfg.tailnet.tags}" ];
           };
+          # The join needs DNS (the OAuth secret is exchanged at api.tailscale.com first), and a
+          # fresh host gets its network a moment after tailscaled starts. Wait for it, and keep
+          # retrying: a host that never joins is unreachable, because public SSH is closed.
+          systemd.services.tailscaled-autoconnect = {
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+            serviceConfig = {
+              Restart = "on-failure";
+              RestartSec = 5;
+            };
+            unitConfig.StartLimitIntervalSec = 0;
+          };
         };
     };
 

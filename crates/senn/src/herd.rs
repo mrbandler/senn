@@ -1,6 +1,7 @@
 //! The `senn` workflows on one herd: plan, apply (create, install, configure) and deploy.
 
 use std::path::{Path, PathBuf};
+use std::time::Duration;
 
 use crate::deployer::Deployer;
 use crate::error::{Error, Result};
@@ -9,6 +10,12 @@ use crate::manifest::Manifest;
 use crate::runner::Runner;
 use crate::secrets::Secrets;
 use crate::tofu::Tofu;
+
+/// How long a fresh host may take to reboot and join the tailnet after its install.
+const JOIN_TIMEOUT: Duration = Duration::from_secs(600);
+
+/// How often to probe a fresh host while waiting for it.
+const JOIN_INTERVAL: Duration = Duration::from_secs(10);
 
 /// One herd: its repository and its manifest.
 pub struct Herd<'a> {
@@ -51,7 +58,7 @@ impl<'a> Herd<'a> {
     ///
     /// 1. Create: plan the core root and, if there are changes and `confirm` returns
     ///    `true`, apply exactly that plan.
-    /// 2. Install: install every host that is not on the tailnet yet.
+    /// 2. Install: install every host that is not on the tailnet yet, and wait until it is.
     /// 3. Configure: push the secrets of every host, then deploy all hosts.
     ///
     /// # Errors
@@ -75,6 +82,7 @@ impl<'a> Herd<'a> {
         for (name, addr) in &hosts {
             if !installer.is_installed(name)? {
                 installer.install(name, &addr.ipv4)?;
+                installer.wait_until_installed(name, JOIN_TIMEOUT, JOIN_INTERVAL)?;
             }
         }
 
@@ -117,7 +125,7 @@ mod tests {
     use crate::runner::fake::Fake;
     use crate::runner::{Cmd, Output};
 
-    /// A fake world: "nix" builds the manifest, the host is not on the tailnet yet.
+    /// A fake world: "nix" builds the manifest; the host joins the tailnet once installed.
     fn world(dir: &Path) -> Fake {
         let core = dir.join("core.json");
         std::fs::write(&core, "{}").unwrap();
@@ -125,15 +133,20 @@ mod tests {
         let json = SAMPLE.replace("/tmp/main.tf.json", &core.display().to_string().replace('\\', "\\\\"));
         std::fs::write(&manifest, json).unwrap();
         let manifest = manifest.display().to_string();
+        let installed = std::rc::Rc::new(std::cell::Cell::new(false));
 
         Fake::new(
             move |cmd| match (cmd.program.as_str(), cmd.args.first().map(String::as_str)) {
                 ("nix", _) => Some(manifest.clone()),
                 ("backend", _) => Some(r#"{"value":"v-0123456789abcdef"}"#.to_owned()),
                 ("tofu", Some("output")) => Some(r#"{"cloud-a":{"ipv4":"1.2.3.4","ipv6":"2a01::1"}}"#.to_owned()),
-                // The install probe fails: not installed yet.
-                ("ssh", _) if cmd.args.last().is_some_and(|a| a == "true") => None,
-                ("tofu" | "nixos-anywhere" | "deploy" | "ssh", _) => Some(String::new()),
+                // The probe answers only after nixos-anywhere ran.
+                ("ssh", _) if cmd.args.last().is_some_and(|a| a == "true") => installed.get().then(String::new),
+                ("nixos-anywhere", _) => {
+                    installed.set(true);
+                    Some(String::new())
+                },
+                ("tofu" | "deploy" | "ssh", _) => Some(String::new()),
                 _ => None,
             },
         )
@@ -172,6 +185,7 @@ mod tests {
                 "tofu output",
                 "probe",
                 "nixos-anywhere",
+                "probe",
                 "push",
                 "deploy"
             ]
