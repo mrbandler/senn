@@ -48,7 +48,7 @@ pub struct Tools {
     /// deploy-rs, for updates.
     pub deploy: String,
 
-    /// The secrets backend (see the `senn-protocol` crate).
+    /// The secrets backend (see [`senn-protocol`](https://docs.rs/senn-protocol)).
     pub backend: String,
 
     /// OpenSSH client.

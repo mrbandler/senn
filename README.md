@@ -16,6 +16,7 @@
 <p align="center">
   <a href="https://github.com/mrbandler/senn/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mrbandler/senn/ci.yml?branch=main&label=CI&logo=github" alt="CI"></a>
   <a href="https://crates.io/crates/senn-cli"><img src="https://img.shields.io/crates/v/senn-cli.svg?logo=rust" alt="crates.io"></a>
+  <a href="https://docs.rs/senn-protocol"><img src="https://img.shields.io/docsrs/senn-protocol?label=docs.rs%20senn-protocol&logo=docs.rs" alt="docs.rs: senn-protocol"></a>
   <a href="https://flakehub.com/flake/mrbandler/senn"><img src="https://img.shields.io/endpoint?url=https://flakehub.com/f/mrbandler/senn/badge" alt="FlakeHub"></a>
   <a href="https://mrbandler.github.io/senn/"><img src="https://img.shields.io/badge/docs-book-blue.svg?logo=mdbook" alt="Book"></a>
   <a href="LICENSE"><img src="https://img.shields.io/crates/l/senn-cli.svg" alt="License: MIT"></a>

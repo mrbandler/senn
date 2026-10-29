@@ -5,7 +5,7 @@
 //! [`Response`] as JSON from its stdout. On an error the backend exits non-zero and
 //! writes a message to stderr, never the value.
 //!
-//! The full specification is in the book, chapter "Secrets backends".
+//! The full specification is in the book, chapter [Secrets backends](https://mrbandler.github.io/senn/secrets-backends.html).
 
 use serde::{Deserialize, Serialize};
 

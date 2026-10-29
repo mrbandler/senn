@@ -71,7 +71,9 @@ A backend must reject a request when:
 
 ## Types for Rust backends
 
-The crate `senn-protocol` has the protocol types: `Request`, `Action`,
-`Response` and `VERSION`. `Action` is `#[non_exhaustive]`, so match it with a `_` arm that
-rejects actions your backend doesn't implement. `senn-backend-onepassword` in the Senn repo is a complete
-example in about 60 lines, tests not counted.
+The crate [`senn-protocol`](https://crates.io/crates/senn-protocol) has the protocol types
+([API documentation](https://docs.rs/senn-protocol)): `Request`, `Action`, `Response` and
+`VERSION`. `Action` is `#[non_exhaustive]`, so match it with a `_` arm that rejects actions
+your backend doesn't implement.
+[`senn-backend-onepassword`](https://github.com/mrbandler/senn/tree/main/crates/senn-backend-onepassword)
+is a complete example in about 60 lines, tests not counted.
