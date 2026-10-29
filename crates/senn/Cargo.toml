@@ -9,7 +9,7 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 documentation = "https://docs.rs/senn"
-readme.workspace = true
+readme = "README.md"
 
 [dependencies]
 senn-protocol.workspace = true
