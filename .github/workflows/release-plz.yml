@@ -63,8 +63,32 @@ jobs:
           persist-credentials: false
       - name: Install toolchain from rust-toolchain.toml
         run: rustup toolchain install
-      - uses: release-plz/action@7ef5e4d4b0420630cfcaeb182c01e13651d4c577 # v0.5.145
+      - id: release-plz
+        uses: release-plz/action@7ef5e4d4b0420630cfcaeb182c01e13651d4c577 # v0.5.145
         with:
           command: release-pr
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+      # The template and the docs pin the FlakeHub version of the release (0.2.*, or 1.* from 1.0).
+      # release-plz only edits Cargo files, so this commits the new pin to the release PR.
+      - name: Pin FlakeHub to the new version
+        if: ${{ steps.release-plz.outputs.pr != '' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR: ${{ steps.release-plz.outputs.pr }}
+        run: |
+          version=$(jq -r '.releases[]? | select(.package_name == "senn-cli") | .version' <<<"$PR")
+          [ -n "$version" ] || exit 0
+          IFS=. read -r major minor _ <<<"$version"
+          if [ "$major" = 0 ]; then pin="0.$minor.*"; else pin="$major.*"; fi
+          gh auth setup-git
+          branch=$(jq -r .head_branch <<<"$PR")
+          git fetch origin "$branch"
+          git switch "$branch"
+          sed -i "s|flakehub.com/f/mrbandler/senn/[0-9.]*\*|flakehub.com/f/mrbandler/senn/$pin|g" \
+            template/flake.nix README.md docs/src/introduction.md
+          git diff --quiet && exit 0
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -am "chore(release): pin FlakeHub to $pin"
+          git push

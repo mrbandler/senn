@@ -1,6 +1,6 @@
 {
   inputs = {
-    senn.url = "github:mrbandler/senn";
+    senn.url = "https://flakehub.com/f/mrbandler/senn/0.2.*";
     # Senn's den module reads these from the herd's own inputs.
     nixpkgs.follows = "senn/nixpkgs";
     flake-parts.follows = "senn/flake-parts";
