@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/mrbandler/senn/compare/v0.2.0...v0.3.0) - 2026-10-29
+
+### <!-- 0 -->🚀 Features
+
+- *(template)* pin senn from FlakeHub ([#25](https://github.com/mrbandler/senn/pull/25))
+
+### <!-- 3 -->📚 Documentation
+
+- link the book and the API documentation ([#23](https://github.com/mrbandler/senn/pull/23))
+
 ## [0.2.0](https://github.com/mrbandler/senn/compare/v0.1.0...v0.2.0) - 2026-10-29
 
 ### <!-- 0 -->🚀 Features

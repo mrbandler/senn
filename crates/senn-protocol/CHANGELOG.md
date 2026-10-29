@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/mrbandler/senn/compare/senn-protocol-v0.2.0...senn-protocol-v0.3.0) - 2026-10-29
+
+### <!-- 3 -->📚 Documentation
+
+- add a README for each library crate ([#26](https://github.com/mrbandler/senn/pull/26))
+- link the book and the API documentation ([#23](https://github.com/mrbandler/senn/pull/23))
+
 ## [0.2.0](https://github.com/mrbandler/senn/compare/senn-protocol-v0.1.0...senn-protocol-v0.2.0) - 2026-10-29
 
 ### <!-- 4 -->♻️ Refactoring
