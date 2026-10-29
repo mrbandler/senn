@@ -18,7 +18,7 @@ A herd is one infrastructure project: its hosts, its secrets vault, its tailnet 
 Start one with:
 
 ```sh
-nix flake init -t github:mrbandler/senn
+nix flake init -t 'https://flakehub.com/f/mrbandler/senn/0.2.*'
 ```
 
 That creates `flake.nix`, `herd/herd.nix` for the settings of the whole herd and one file per
