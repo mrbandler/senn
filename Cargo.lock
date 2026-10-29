@@ -512,7 +512,7 @@ dependencies = [
 
 [[package]]
 name = "senn"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "miette",
  "senn-protocol",
@@ -524,7 +524,7 @@ dependencies = [
 
 [[package]]
 name = "senn-backend-onepassword"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "miette",
  "senn-protocol",
@@ -534,7 +534,7 @@ dependencies = [
 
 [[package]]
 name = "senn-cli"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "clap",
  "miette",
@@ -545,7 +545,7 @@ dependencies = [
 
 [[package]]
 name = "senn-protocol"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "serde",
  "serde_json",

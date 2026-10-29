@@ -71,13 +71,13 @@ Every method installs the command `senn`.
 Install the latest release from [FlakeHub](https://flakehub.com/flake/mrbandler/senn):
 
 ```sh
-nix profile install 'https://flakehub.com/f/mrbandler/senn/0.2.*'
+nix profile install 'https://flakehub.com/f/mrbandler/senn/0.3.*'
 ```
 
 To try it without installing:
 
 ```sh
-nix run 'https://flakehub.com/f/mrbandler/senn/0.2.*' -- --help
+nix run 'https://flakehub.com/f/mrbandler/senn/0.3.*' -- --help
 ```
 
 To get the newest changes, install from `main` on GitHub:
@@ -112,7 +112,7 @@ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mrbandler/senn/releases
 
 ```sh
 mkdir infra && cd infra
-nix flake init -t 'https://flakehub.com/f/mrbandler/senn/0.2.*'
+nix flake init -t 'https://flakehub.com/f/mrbandler/senn/0.3.*'
 ```
 
 This creates a herd: `flake.nix`, `herd/herd.nix` for the settings of the whole herd and one

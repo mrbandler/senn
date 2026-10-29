@@ -56,7 +56,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 rust-version = "1.96"
 authors = ["mrbandler <me@mrbandler.dev>"]
@@ -68,8 +68,8 @@ readme = "README.md"
 [workspace.dependencies]
 thiserror = "2.0"
 miette = { version = "7.6", default-features = false, features = ["derive"] }
-senn = { path = "crates/senn", version = "0.2.0" }
-senn-protocol = { path = "crates/senn-protocol", version = "0.2.0" }
+senn = { path = "crates/senn", version = "0.3.0" }
+senn-protocol = { path = "crates/senn-protocol", version = "0.3.0" }
 clap = { version = "4.6", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
