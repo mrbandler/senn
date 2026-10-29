@@ -56,50 +56,65 @@
     };
 
   # Hardware side: Hetzner Cloud VM, legacy BIOS boot, one disk.
-  nixos = {
-    imports = [
-      inputs.srvos.nixosModules.hardware-hetzner-cloud
-      inputs.disko.nixosModules.disko
-    ];
-    # GRUB for both firmware types (see the partitions below). As the removable EFI path
-    # (\EFI\BOOT\BOOTX64.EFI) it needs no NVRAM entry, which a fresh VM doesn't have.
-    boot.loader.grub = {
-      efiSupport = true;
-      efiInstallAsRemovable = true;
-    };
-    disko.devices.disk.main = {
-      type = "disk";
-      device = "/dev/sda";
-      content = {
-        type = "gpt";
-        # Hetzner Cloud boots some server types with BIOS and others with UEFI, so the disk
-        # carries both: a BIOS boot partition for GRUB's i386-pc stage and an EFI system
-        # partition for its x86_64-efi image.
-        partitions = {
-          bios = {
-            size = "1M";
-            type = "EF02";
-          };
-          esp = {
-            size = "512M";
-            type = "EF00";
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
-              mountOptions = [ "umask=0077" ];
+  nixos =
+    { lib, ... }:
+    {
+      imports = [
+        inputs.srvos.nixosModules.hardware-hetzner-cloud
+        inputs.disko.nixosModules.disko
+      ];
+      # GRUB for both firmware types (see the partitions below). As the removable EFI path
+      # (\EFI\BOOT\BOOTX64.EFI) it needs no NVRAM entry, which a fresh VM doesn't have.
+      boot.loader.grub = {
+        efiSupport = true;
+        efiInstallAsRemovable = true;
+      };
+      # cloud-init only sets up the network from Hetzner's metadata (IPv6 is static there); NixOS
+      # owns everything else. Its default modules would manage users, passwords, SSH keys and the
+      # hostname, and run the server's user_data (kept from its creation, and run again on a
+      # rebuild): on NixOS they fail or undo what the host definition says. The network config
+      # is applied in cloud-init's local stage, outside these module lists.
+      services.cloud-init.settings = {
+        datasource_list = [ "Hetzner" ];
+        preserve_hostname = true;
+        allow_userdata = false;
+        cloud_init_modules = lib.mkForce [ ];
+        cloud_config_modules = lib.mkForce [ ];
+        cloud_final_modules = lib.mkForce [ ];
+      };
+      disko.devices.disk.main = {
+        type = "disk";
+        device = "/dev/sda";
+        content = {
+          type = "gpt";
+          # Hetzner Cloud boots some server types with BIOS and others with UEFI, so the disk
+          # carries both: a BIOS boot partition for GRUB's i386-pc stage and an EFI system
+          # partition for its x86_64-efi image.
+          partitions = {
+            bios = {
+              size = "1M";
+              type = "EF02";
             };
-          };
-          root = {
-            size = "100%";
-            content = {
-              type = "filesystem";
-              format = "ext4";
-              mountpoint = "/";
+            esp = {
+              size = "512M";
+              type = "EF00";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = [ "umask=0077" ];
+              };
+            };
+            root = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
+              };
             };
           };
         };
       };
     };
-  };
 }
