@@ -1,4 +1,4 @@
-//! Client side of the secrets backend protocol (see the `senn-protocol` crate).
+//! Client side of the secrets backend protocol (see [`senn-protocol`](https://docs.rs/senn-protocol)).
 
 use crate::error::{Error, Result};
 use std::borrow::Borrow;

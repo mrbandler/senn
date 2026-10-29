@@ -10,6 +10,7 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+documentation = "https://mrbandler.github.io/senn/"
 readme.workspace = true
 # The CLI is the product: its sources, the Nix module and the herd template. A change to any of
 # these files releases a new version (release-plz looks at the packaged files).
@@ -61,7 +62,7 @@ rust-version = "1.96"
 authors = ["mrbandler <me@mrbandler.dev>"]
 license = "MIT"
 repository = "https://github.com/mrbandler/senn"
-homepage = "https://github.com/mrbandler/senn"
+homepage = "https://mrbandler.github.io/senn/"
 readme = "README.md"
 
 [workspace.dependencies]

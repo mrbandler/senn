@@ -15,7 +15,7 @@ pub enum Error {
     #[error("invalid request")]
     #[diagnostic(
         code(senn_backend_onepassword::invalid_request),
-        help("send one protocol 1 request as JSON, see the chapter \"Secrets backends\" in the Senn book")
+        help("send one protocol 1 request as JSON, see https://mrbandler.github.io/senn/secrets-backends.html")
     )]
     InvalidRequest(#[source] serde_json::Error),
 

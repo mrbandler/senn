@@ -2,7 +2,7 @@
 //!
 //! The `senn` command (crate `senn-cli`) is a thin layer over this crate. Its modules are
 //! internal to Senn and have no stable API. Backends written in Rust use the crate
-//! `senn-protocol` instead.
+//! [`senn-protocol`](https://docs.rs/senn-protocol) instead. The user documentation is the [book](https://mrbandler.github.io/senn/).
 
 pub mod deployer;
 mod error;

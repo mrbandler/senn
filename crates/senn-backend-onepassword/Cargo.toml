@@ -10,6 +10,7 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+documentation = "https://mrbandler.github.io/senn/secrets-backends.html"
 readme.workspace = true
 
 [dependencies]
